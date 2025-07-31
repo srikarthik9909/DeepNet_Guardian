@@ -16,7 +16,7 @@ flows = {}
 flow_lock = Lock()
 extracted_features = deque(maxlen=20)
 flow_timeout = 30  # seconds
-log_file_path = r"logs/flow_features_log.csv"
+log_file_path = r"logs/api_logs/api_data.csv"
 
 # Feature extraction helper
 class Flow:
