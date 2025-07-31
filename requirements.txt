@@ -4,6 +4,3 @@ scapy
 pandas
 pytest
 scikit-learn
-httpx
-requests
-tensorflow
