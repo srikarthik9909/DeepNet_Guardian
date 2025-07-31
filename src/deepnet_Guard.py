@@ -9,8 +9,8 @@ from datetime import datetime
 from sklearn.preprocessing import MinMaxScaler
 
 # Paths
-ddos_model_path = r"Models\Trained-Models\dos_attack_model.tflite"
-port_scan_model_path = r"Models\Trained-Models\port_scan_model.tflite"
+ddos_model_path = r"src\Models\Trained-Models\dos_attack_model.tflite"
+port_scan_model_path = r"src\Models\Trained-Models\port_scan_model.tflite"
 log_file_ddos = r"logs/ddos_log.csv"
 log_file_portscan = r"logs/portscan_log.csv"
 
