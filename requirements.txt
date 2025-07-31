@@ -2,3 +2,5 @@ fastapi
 uvicorn[standard]
 scapy
 pandas
+pytest
+scikit-learn
