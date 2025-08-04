@@ -11,8 +11,8 @@ from sklearn.preprocessing import MinMaxScaler
 # Paths
 ddos_model_path = "src/Models/Trained-Models/dos_attack_model.tflite"
 port_scan_model_path = "src/Models/Trained-Models/port_scan_model.tflite"
-log_file_ddos = "logs/ddos_log.csv"
-log_file_portscan = "logs/portscan_log.csv"
+log_file_ddos = "logs/attack_logs/ddos_data.csv"
+log_file_portscan = "logs/attack_logs/port_scanning_data.csv"
 
 # Features
 ddos_features = [

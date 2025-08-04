@@ -16,7 +16,7 @@ flows = {}
 flow_lock = Lock()
 extracted_features = deque(maxlen=20)
 flow_timeout = 30  # seconds
-log_file_path = r"logs/api_logs/api_data.csv"
+log_file_path = "logs/api_logs/api_data.csv"
 
 # Feature extraction helper
 class Flow:
@@ -265,8 +265,12 @@ def packet_callback(pkt):
             for k in expired_keys:
                 del flows[k]
 
+# Ensure log directory exists
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+
 # Start packet capture in background
 Thread(target=lambda: sniff(prn=packet_callback, store=False)).start()
+
 
 @app.get("/extract_features")
 def get_latest_features():
