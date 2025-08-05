@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Deepnet_Guard
+          file: ./DockerFile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/deepnet-guardian:latest
 
