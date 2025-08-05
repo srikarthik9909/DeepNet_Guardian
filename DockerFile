@@ -10,4 +10,5 @@ RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
+# run the program
 CMD ["bash", "src/start.sh"]
