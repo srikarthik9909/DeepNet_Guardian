@@ -7,3 +7,4 @@ scikit-learn
 httpx
 requests
 tensorflow
+flask

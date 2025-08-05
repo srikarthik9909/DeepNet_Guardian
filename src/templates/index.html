@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deep Net Guardian Dashboard</title>
+    <meta http-equiv="refresh" content="5">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #333;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px auto;
+            width: 400px;
+        }
+        .severity {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/data');
+            const data = await response.json();
+            const ddos = data.ddos || 0;
+            const portscan = data.portscan || 0;
+
+            document.getElementById("ddos-value").innerText = ddos.toFixed(3);
+            document.getElementById("ddos-severity").innerText = getSeverity(ddos);
+
+            document.getElementById("portscan-value").innerText = portscan.toFixed(3);
+            document.getElementById("portscan-severity").innerText = getSeverity(portscan);
+        }
+
+        function getSeverity(value) {
+            if (value > 0.8) return "ATTACK 🔴";
+            if (value > 0.4) return "MODERATE 🟠";
+            return "NEUTRAL 🟢";
+        }
+
+        setInterval(fetchData, 2000);
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <h1>Deep Net Guardian</h1>
+
+    <div class="card">
+        <h2>DDoS Detection</h2>
+        <div>Score: <span id="ddos-value">0.000</span></div>
+        <div class="severity" id="ddos-severity">NEUTRAL 🟢</div>
+    </div>
+
+    <div class="card">
+        <h2>Port Scan Detection</h2>
+        <div>Score: <span id="portscan-value">0.000</span></div>
+        <div class="severity" id="portscan-severity">NEUTRAL 🟢</div>
+    </div>
+</body>
+</html>
