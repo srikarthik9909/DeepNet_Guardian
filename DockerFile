@@ -1,19 +1,13 @@
 FROM python:3.10-slim
 
-# Set the working directory
 WORKDIR /app
 
-# Copy app code
 COPY . /app/
 
-# Copy and give execute permission to start.sh
-COPY start.sh /src/start.sh
-RUN chmod +x /src/start.sh
+RUN chmod +x src/start.sh
 
-# Install dependencies if any
 RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
-# Run your startup script
-CMD ["bash", "start.sh"]
+CMD ["bash", "src/start.sh"]
