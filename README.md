@@ -202,7 +202,7 @@ We welcome contributions!
 3. Commit changes (git commit -m "add feature")
 4. Push & create PR 🚀
 
-## 👤 Author
+## 👤 Contributors
 
 **Pampana Sri Karthik**  [GitHub](https://github.com/srikarthik9909) [Linkedin](https://www.linkedin.com/in/srikarthikpampana/)
 
