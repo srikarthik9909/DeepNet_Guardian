@@ -3,26 +3,26 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from unittest.mock import patch
-from deepnet_Guard import create_sequences, classify_threat, run_tflite_model
-
-# Dummy TFLite interpreter class for mocking model behavior
+# ---- Dummy TFLite interpreter ----
 class DummyInterpreter:
     def __init__(self, output=0.8):
         self.output = output
-    def allocate_tensors(self):
-        pass
-    def get_input_details(self):
-        return [{"index": 0}]
-    def get_output_details(self):
-        return [{"index": 0}]
-    def set_tensor(self, index, value):
-        self.input = value
-    def invoke(self):
-        pass
-    def get_tensor(self, index):
-        return np.array([[self.output]])
+    def allocate_tensors(self): pass
+    def get_input_details(self): return [{"index": 0}]
+    def get_output_details(self): return [{"index": 0}]
+    def set_tensor(self, index, value): self.input = value
+    def invoke(self): pass
+    def get_tensor(self, index): return np.array([[self.output]])
 
-# Fixture for generating a mock input dataframe
+
+# ---- Pytest fixture: patch tflite.Interpreter before importing deepnet_Guard ----
+@pytest.fixture(autouse=True)
+def patch_tflite(monkeypatch):
+    monkeypatch.setattr("deepnet_Guard.tflite.Interpreter", lambda *a, **kw: DummyInterpreter())
+    yield
+
+
+# ---- Fixture: mock dataframe with 20 rows ----
 @pytest.fixture
 def mock_dataframe():
     return pd.DataFrame([{
@@ -59,26 +59,29 @@ def mock_dataframe():
         'Down/Up Ratio': 0.5,
         'Average Packet Size': 750,
         'Fwd Segment Size Avg': 300,
-    }] * 20)  # Creates a dataframe with 20 identical rows
+    }] * 20)
 
-# Test for sequence creation
+
+# ---- Tests ----
+
 def test_create_sequence(mock_dataframe):
+    from deepnet_Guard import create_sequences  # imported after patch
     scaler = MinMaxScaler()
     sequence = create_sequences(mock_dataframe, mock_dataframe.columns.tolist(), scaler, sequence_length=15)
     assert sequence.shape == (1, 15, len(mock_dataframe.columns))
 
-# Fixed logic for classifying threat scores
+
 def test_classify_threat():
+    from deepnet_Guard import classify_threat
     assert classify_threat(0.2) == "NEUTRAL"
     assert classify_threat(0.5) == "MODERATE"
     assert classify_threat(0.9) == "ATTACK"
 
-# Test for running TFLite model using dummy interpreter
+
 def test_run_tflite_model():
+    from deepnet_Guard import run_tflite_model
     dummy = DummyInterpreter(output=0.85)
-    dummy.allocate_tensors()
-    dummy.set_tensor(0, np.ones((1, 15, 33)).astype(np.float32))
-    dummy.invoke()
-    with patch("deepnet_Guard.tflite.Interpreter", return_value=dummy):
-        score = run_tflite_model(dummy, np.ones((1, 15, 33), dtype=np.float32))
-        assert 0 <= score <= 1
+    input_data = np.ones((1, 15, 33), dtype=np.float32)
+    score = run_tflite_model(dummy, input_data)
+    assert 0 <= score <= 1
+    assert abs(score - 0.85) < 1e-6
