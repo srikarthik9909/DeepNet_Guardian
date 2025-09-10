@@ -94,7 +94,7 @@ DeepNet_Guardian/
 
 ## 🛠️ Installation & Setup
 
-###Prerequisites
+### Prerequisites
 
 * Python 3.9+
 * Git
